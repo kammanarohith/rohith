@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rohith Reddy's Personal Information</title>
+</head>
+<body style="font-family: 'Arial', sans-serif; background-color: #f8f9fa; margin: 0; padding: 0; color: #333;">
+
+    <!-- Header Section -->
+    <div style="background-color: #2C3E50; color: white; padding: 30px 20px; text-align: center;">
+        <h1 style="font-size: 2.5em; margin: 0;">Rohith Reddy's Personal Information</h1>
+    </div>
+
+    <!-- Main Content Section -->
+    <div style="width: 80%; max-width: 900px; margin: 40px auto; background-color: white; border-radius: 10px; box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); padding: 30px;">
+
+        <!-- Name Section -->
+        <div style="background-color: #ecf0f1; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            <h2 style="color: #2980B9; font-size: 1.8em;">Name</h2>
+            <p style="font-size: 1.2em;">Your Name: <strong style="color: #2C3E50;">Rohith Reddy</strong></p>
+        </div>
+
+        <!-- Education Section -->
+        <div style="background-color: #ecf0f1; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            <h2 style="color: #2980B9; font-size: 1.8em;">Education</h2>
+            <p style="font-size: 1.2em;">Degree: <strong style="color: #2C3E50;">Bachelor of Engineering (B.E.) in Computer Science Engineering (CSE)</strong></p>
+            <p style="font-size: 1.2em;">University: <strong style="color: #2C3E50;">Sathyabama University</strong></p>
+        </div>
+
+        <!-- Languages Section -->
+        <div style="background-color: #ecf0f1; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            <h2 style="color: #2980B9; font-size: 1.8em;">Languages</h2>
+            <p style="font-size: 1.2em;">Telugu: <strong style="color: #2C3E50;">Fluent</strong></p>
+            <p style="font-size: 1.2em;">Tamil: <strong style="color: #2C3E50;">Fluent</strong></p>
+            <p style="font-size: 1.2em;">Hindi: <strong style="color: #2C3E50;">Intermediate</strong></p>
+        </div>
+
+        <!-- Skills Section -->
+        <div style="background-color: #ecf0f1; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            <h2 style="color: #2980B9; font-size: 1.8em;">Skills</h2>
+            <p style="font-size: 1.2em;">C, JavaScript</p>
+        </div>
+
+        <!-- Phone Number Section -->
+        <div style="background-color: #ecf0f1; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            <h2 style="color: #2980B9; font-size: 1.8em;">Phone Number</h2>
+            <p style="font-size: 1.2em;">Mobile: <strong style="color: #2C3E50;">+91 6300137516</strong></p>
+        </div>
+
+        <!-- Address Section -->
+        <div style="background-color: #ecf0f1; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            <h2 style="color: #2980B9; font-size: 1.8em;">Address</h2>
+            <p style="font-size: 1.2em;">Chittoor, Andhra Pradesh, India</p>
+        </div>
+
+        <!-- Marital Status Section -->
+        <div style="background-color: #ecf0f1; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            <h2 style="color: #2980B9; font-size: 1.8em;">Marital Status</h2>
+            <p style="font-size: 1.2em;">Status: <strong style="color: #2C3E50;">Single</strong></p>
+        </div>
+
+        <!-- Footer Section -->
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="mailto:rohith.reddy@example.com" style="background-color: #2980B9; color: white; padding: 12px 20px; font-size: 1.1em; border: none; border-radius: 5px; text-decoration: none;">Contact Me</a>
+        </div>
+    </div>
+
+</body>
+</html>
