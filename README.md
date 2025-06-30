@@ -1,2 +1,0 @@
-# rohith
-about mysel
