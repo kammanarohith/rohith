@@ -18,7 +18,8 @@
   </div>
 
   <script>
-    const result = JSON.parse(localStorage.getItem("studentResult"));
+    const testKey = window.location.pathname.split("/")[1];
+    const result = JSON.parse(localStorage.getItem(`studentResult_${testKey}`));
     const questions = JSON.parse(localStorage.getItem("testQuestions"));
 
     if (!result || !questions) {
@@ -30,46 +31,28 @@
       resultBox.innerHTML = `
         <p><strong>Name:</strong> ${result.name}</p>
         <p><strong>Reg. No:</strong> ${result.regNo}</p>
-        ${
-          result.forced
-            ? "<p style='color:red'><strong>Test ended due to tab switch or suspicious activity.</strong></p>"
-            : ""
-        }
-        <hr>
-      `;
+        ${result.forced ? "<p style='color:red'><strong>Test ended due to suspicious activity.</strong></p>" : ""}
+        <hr>`;
 
       questions.forEach((q, idx) => {
         const correctAns = q.correct;
         const studentAns = result.answers[idx] || [];
-        const isCorrect =
-          studentAns.length === correctAns.length &&
-          studentAns.every((val) => correctAns.includes(val));
-
+        const isCorrect = studentAns.length === correctAns.length &&
+                          studentAns.every(val => correctAns.includes(val));
         if (isCorrect) correctCount++;
 
-        let html = `<div class="question-card">`;
-        html += `<h3>Q${idx + 1}. ${q.question}</h3>`;
-
+        let html = `<div class="question-card"><h3>Q${idx + 1}. ${q.question}</h3>`;
         q.options.forEach((opt, i) => {
           const isSelected = studentAns.includes(i);
           const isRight = correctAns.includes(i);
-          const cls = isRight
-            ? "correct"
-            : isSelected
-            ? "wrong"
-            : "";
-          html += `<p class="${cls}">${opt}${
-            isSelected ? " <span class='your-answer'>(Your answer)</span>" : ""
-          }</p>`;
+          const cls = isRight ? "correct" : isSelected ? "wrong" : "";
+          html += `<p class="${cls}">${opt}${isSelected ? " <span class='your-answer'>(Your answer)</span>" : ""}</p>`;
         });
-
         html += `</div>`;
         resultBox.innerHTML += html;
       });
 
-      resultBox.innerHTML += `
-        <h2>✅ Score: ${correctCount} / ${questions.length}</h2>
-      `;
+      resultBox.innerHTML += `<h2>✅ Score: ${correctCount} / ${questions.length}</h2>`;
     }
   </script>
 </body>

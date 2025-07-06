@@ -53,12 +53,6 @@ textarea {
   border: 1px solid #ccc;
   font-size: 16px;
   outline: none;
-  transition: 0.3s ease;
-}
-
-input:focus {
-  border-color: #7e57c2;
-  box-shadow: 0 0 5px rgba(126, 87, 194, 0.3);
 }
 
 button {
@@ -71,16 +65,8 @@ button {
   cursor: pointer;
   display: block;
   margin: 30px auto 0 auto;
-  transition: 0.3s ease;
 }
 
 button:hover {
   background: #5e35b1;
-}
-
-.question-form .question-card {
-  background: #f3e5f5;
-  padding: 20px;
-  border-radius: 12px;
-  margin-bottom: 20px;
 }
