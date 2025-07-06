@@ -2,53 +2,74 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>FLAMES Result</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <title>Test Result</title>
+  <link rel="stylesheet" href="style.css">
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(to right, #ffdde1, #ee9ca7);
-      text-align: center;
-      padding-top: 100px;
-    }
-    h1 {
-      font-size: 48px;
-      color: #d72638;
-    }
-    h2 {
-      font-size: 36px;
-      color: #333;
-    }
-    img {
-      width: 180px;
-      margin-top: 30px;
-    }
+    .correct { background: #c8e6c9; padding: 6px; border-radius: 6px; }
+    .wrong { background: #ffcdd2; padding: 6px; border-radius: 6px; }
+    .your-answer { font-weight: bold; color: #1976d2; }
+    .question-card { margin-bottom: 25px; padding: 15px; border: 1px solid #ddd; border-radius: 10px; background: #f5f5f5; }
   </style>
 </head>
 <body>
-  <h1>FLAMES Result</h1>
-  <h2 id="resultText"></h2>
-  <img id="resultImage" src="" alt="FLAMES Meaning">
+  <div class="container">
+    <h1>📊 Test Results</h1>
+    <div id="resultBox"></div>
+  </div>
 
   <script>
-    const flamesMeaning = {
-      F: { label: "Friends", img: "https://img.icons8.com/3d-fluency/200/friends--v1.png" },
-      L: { label: "Lovers", img: "https://img.icons8.com/3d-fluency/200/hearts.png" },
-      A: { label: "Attraction", img: "https://img.icons8.com/3d-fluency/200/like.png" },
-      M: { label: "Marriage", img: "https://img.icons8.com/3d-fluency/200/wedding-rings.png" },
-      E: { label: "Enemies", img: "https://img.icons8.com/3d-fluency/200/broken-heart.png" },
-      S: { label: "Siblings", img: "https://img.icons8.com/3d-fluency/200/siblings.png" }
-    };
+    const result = JSON.parse(localStorage.getItem("studentResult"));
+    const questions = JSON.parse(localStorage.getItem("testQuestions"));
 
-    const params = new URLSearchParams(window.location.search);
-    const letter = params.get('letter');
-
-    if (letter && flamesMeaning[letter]) {
-      const { label, img } = flamesMeaning[letter];
-      document.getElementById('resultText').textContent = `${letter} - ${label}`;
-      document.getElementById('resultImage').src = img;
+    if (!result || !questions) {
+      document.getElementById("resultBox").innerHTML = "<p>No result found.</p>";
     } else {
-      document.getElementById('resultText').textContent = "Invalid result.";
+      let correctCount = 0;
+      const resultBox = document.getElementById("resultBox");
+
+      resultBox.innerHTML = `
+        <p><strong>Name:</strong> ${result.name}</p>
+        <p><strong>Reg. No:</strong> ${result.regNo}</p>
+        ${
+          result.forced
+            ? "<p style='color:red'><strong>Test ended due to tab switch or suspicious activity.</strong></p>"
+            : ""
+        }
+        <hr>
+      `;
+
+      questions.forEach((q, idx) => {
+        const correctAns = q.correct;
+        const studentAns = result.answers[idx] || [];
+        const isCorrect =
+          studentAns.length === correctAns.length &&
+          studentAns.every((val) => correctAns.includes(val));
+
+        if (isCorrect) correctCount++;
+
+        let html = `<div class="question-card">`;
+        html += `<h3>Q${idx + 1}. ${q.question}</h3>`;
+
+        q.options.forEach((opt, i) => {
+          const isSelected = studentAns.includes(i);
+          const isRight = correctAns.includes(i);
+          const cls = isRight
+            ? "correct"
+            : isSelected
+            ? "wrong"
+            : "";
+          html += `<p class="${cls}">${opt}${
+            isSelected ? " <span class='your-answer'>(Your answer)</span>" : ""
+          }</p>`;
+        });
+
+        html += `</div>`;
+        resultBox.innerHTML += html;
+      });
+
+      resultBox.innerHTML += `
+        <h2>✅ Score: ${correctCount} / ${questions.length}</h2>
+      `;
     }
   </script>
 </body>

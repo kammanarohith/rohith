@@ -1,55 +1,78 @@
-const flamesMeaning = {
-  F: { label: "Friends", img: "https://img.icons8.com/3d-fluency/200/friends--v1.png" },
-  L: { label: "Lovers", img: "https://img.icons8.com/3d-fluency/200/hearts.png" },
-  A: { label: "Attraction", img: "https://img.icons8.com/3d-fluency/200/like.png" },
-  M: { label: "Marriage", img: "https://img.icons8.com/3d-fluency/200/wedding-rings.png" },
-  E: { label: "Enemies", img: "https://img.icons8.com/3d-fluency/200/broken-heart.png" },
-  S: { label: "Siblings", img: "https://img.icons8.com/3d-fluency/200/siblings.png" }
-};
+const nextBtn = document.getElementById("nextBtn");
+const questionForm = document.getElementById("questionForm");
+const saveTestBtn = document.getElementById("saveTestBtn");
 
-function cleanName(name) {
-  return name.toLowerCase().replace(/\s/g, '');
-}
+nextBtn.addEventListener("click", () => {
+  const numQuestions = parseInt(document.getElementById("numQuestions").value);
+  const testTime = parseInt(document.getElementById("testTime").value);
 
-function getRemainingCount(name1, name2) {
-  let arr1 = name1.split('');
-  let arr2 = name2.split('');
-
-  for (let i = 0; i < arr1.length; i++) {
-    let index = arr2.indexOf(arr1[i]);
-    if (index !== -1) {
-      arr1.splice(i, 1);
-      arr2.splice(index, 1);
-      i--;
-    }
-  }
-
-  return arr1.length + arr2.length;
-}
-
-function getFlamesLetter(count) {
-  let flames = ['F', 'L', 'A', 'M', 'E', 'S'];
-  let index = 0;
-  while (flames.length > 1) {
-    index = (index + count - 1) % flames.length;
-    flames.splice(index, 1);
-  }
-  return flames[0];
-}
-
-function flamesGame() {
-  const name1 = cleanName(document.getElementById("name1").value);
-  const name2 = cleanName(document.getElementById("name2").value);
-
-  if (!name1 || !name2) {
-    alert("Please enter both names!");
+  if (!numQuestions || !testTime) {
+    alert("Please enter valid number of questions and time.");
     return;
   }
 
-  const count = getRemainingCount(name1, name2);
-  const letter = getFlamesLetter(count);
+  localStorage.setItem("testTime", testTime); // in minutes
+  questionForm.innerHTML = ""; // Clear if already generated
 
-  // Redirect to result page with final letter as a parameter
-  window.location.href = `result.html?letter=${letter}`;
-}
+  for (let i = 1; i <= numQuestions; i++) {
+    const card = document.createElement("div");
+    card.className = "question-card";
 
+    card.innerHTML = `
+      <label>📝 Question ${i}</label>
+      <textarea placeholder="Enter your question" required rows="2" style="width:100%;"></textarea>
+      <div class="options">
+        ${[1, 2, 3, 4]
+          .map(
+            (n) => `
+          <div style="margin-top:10px;">
+            <input type="text" placeholder="Option ${n}" required style="width:80%;">
+            <label>
+              <input type="checkbox" class="correct-check"> Correct
+            </label>
+          </div>
+        `
+          )
+          .join("")}
+      </div>
+    `;
+    questionForm.appendChild(card);
+  }
+
+  questionForm.style.display = "block";
+  saveTestBtn.style.display = "block";
+});
+
+// Save test and go to student page
+saveTestBtn.addEventListener("click", () => {
+  const questionCards = document.querySelectorAll(".question-card");
+  let questions = [];
+
+  questionCards.forEach((card, index) => {
+    const questionText = card.querySelector("textarea").value.trim();
+    const options = [...card.querySelectorAll("input[type='text']")].map((inp) =>
+      inp.value.trim()
+    );
+    const correctChecks = [...card.querySelectorAll(".correct-check")];
+    const correctAnswers = correctChecks
+      .map((check, i) => (check.checked ? i : -1))
+      .filter((i) => i !== -1);
+
+    if (!questionText || options.some((opt) => opt === "") || correctAnswers.length === 0) {
+      alert(`Please complete Question ${index + 1} and select at least one correct answer.`);
+      return;
+    }
+
+    questions.push({
+      question: questionText,
+      options,
+      correct: correctAnswers, // indexes of correct options
+    });
+  });
+
+  // Save to localStorage
+  localStorage.setItem("testQuestions", JSON.stringify(questions));
+
+  // Redirect to test page
+  window.location.href = "test.html";
+});

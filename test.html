@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Take Test</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🧠 Online Test</h1>
+
+    <div id="userInfoForm">
+      <label>👤 Name</label>
+      <input type="text" id="studentName" placeholder="Enter your name">
+
+      <label>🆔 Registration Number</label>
+      <input type="text" id="regNo" placeholder="Enter registration number">
+
+      <button onclick="startTest()">Start Test</button>
+    </div>
+
+    <div id="testArea" style="display:none;">
+      <div class="timer">⏱️ Time left: <span id="timer">00:00</span></div>
+
+      <div id="questionBox"></div>
+
+      <div style="text-align: center;">
+        <button onclick="nextQuestion()">Next</button>
+        <button onclick="submitTest()" style="background: #d32f2f;">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let questions = JSON.parse(localStorage.getItem("testQuestions") || "[]");
+    let testTime = parseInt(localStorage.getItem("testTime")) || 5; // in minutes
+    let currentQ = 0;
+    let answers = [];
+    let timerInterval;
+    let timeLeft;
+
+    // Block tab switching / focus loss
+    window.onblur = () => {
+      alert("Tab switch detected. Test will be submitted immediately.");
+      submitTest(true);
+    };
+
+    function startTest() {
+      const name = document.getElementById("studentName").value.trim();
+      const reg = document.getElementById("regNo").value.trim();
+
+      if (!name || !reg) return alert("Please fill in your name and registration number.");
+
+      if (localStorage.getItem("attempted_" + reg)) {
+        alert("You have already attempted the test.");
+        return;
+      }
+
+      localStorage.setItem("studentName", name);
+      localStorage.setItem("regNo", reg);
+
+      document.getElementById("userInfoForm").style.display = "none";
+      document.getElementById("testArea").style.display = "block";
+
+      timeLeft = testTime * 60;
+      updateTimer();
+      timerInterval = setInterval(updateTimer, 1000);
+
+      showQuestion();
+    }
+
+    function updateTimer() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      document.getElementById("timer").textContent =
+        `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+
+      if (timeLeft <= 0) {
+        submitTest(false);
+      }
+
+      timeLeft--;
+    }
+
+    function showQuestion() {
+      const q = questions[currentQ];
+      if (!q) return;
+
+      let html = `<h2>Q${currentQ + 1}. ${q.question}</h2>`;
+      html += `<form>`;
+      q.options.forEach((opt, idx) => {
+        html += `
+          <div style="margin: 10px 0;">
+            <label>
+              <input type="checkbox" name="option" value="${idx}">
+              ${opt}
+            </label>
+          </div>`;
+      });
+      html += `</form>`;
+
+      document.getElementById("questionBox").innerHTML = html;
+    }
+
+    function nextQuestion() {
+      const selected = Array.from(document.querySelectorAll("input[name='option']:checked"))
+        .map((el) => parseInt(el.value));
+      answers[currentQ] = selected;
+
+      if (currentQ < questions.length - 1) {
+        currentQ++;
+        showQuestion();
+      } else {
+        alert("This is the last question. Click 'Submit' to finish.");
+      }
+    }
+
+    function submitTest(forceSubmit = false) {
+      clearInterval(timerInterval);
+      const reg = localStorage.getItem("regNo");
+      localStorage.setItem("attempted_" + reg, "true");
+
+      const result = {
+        name: localStorage.getItem("studentName"),
+        regNo: reg,
+        answers,
+        forced: forceSubmit,
+      };
+
+      localStorage.setItem("studentResult", JSON.stringify(result));
+      window.location.href = "result.html";
+    }
+  </script>
+</body>
+</html>
